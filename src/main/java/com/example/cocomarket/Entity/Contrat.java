@@ -1,0 +1,30 @@
+package com.example.cocomarket.Entity;
+
+import java.time.LocalDate;
+import java.util.Set;
+
+import lombok.*;
+
+import javax.persistence.*;
+
+
+
+@Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
+public class Contrat {
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @NonNull
+    private Integer id;
+    private Float commision;
+    private String description;
+    private LocalDate dateDebutContrat;
+    private LocalDate dateFinContrat;
+    private Boolean archive;
+    @OneToMany(mappedBy = "Contrat_shop")
+    private Set<Shop> Shopes_Contrats;
+}
