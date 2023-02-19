@@ -19,6 +19,7 @@ public class Catalogue {
     private String nom;
     private  String description;
     private   String img;
+    private   String imgggg;
     @ManyToMany(mappedBy = "Catalogues")
     private Set<Produit> Produits_Cats;
 
