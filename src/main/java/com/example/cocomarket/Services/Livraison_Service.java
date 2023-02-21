@@ -29,7 +29,7 @@ return lr.save(l);   }
     }
 
     @Override
-    public void deleteUniversite(Integer idLiv) {
+    public void deleteLiv(Integer idLiv) {
      lr.deleteById(idLiv);
     }
 

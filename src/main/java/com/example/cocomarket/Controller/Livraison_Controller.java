@@ -25,7 +25,7 @@ public class Livraison_Controller {
     @DeleteMapping("/remove-livraison/{liv-id}")
     public void removeLiv(@PathVariable("liv-id") Integer livId) {
 
-        il.deleteUniversite(livId);
+        il.deleteLiv(livId);
     }
     @GetMapping("/retrieve-all-Liv")
     public List<Livraison> getlivs() {
