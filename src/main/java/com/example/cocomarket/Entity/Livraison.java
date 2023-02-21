@@ -27,8 +27,8 @@ public class Livraison {
     @Enumerated(EnumType.STRING)
     private Etat_Livraison etat;
     @JsonIgnore
-    @OneToMany(mappedBy = "Livraison_commande")
-    private Set<Commande> Command_liv;
+    @OneToOne(mappedBy = "Livraison_commande")
+    private Commande Command_liv;
     @JsonIgnore
     @OneToMany
     private Set<Raiting_DelevryMan> Rating_Liv;

@@ -28,7 +28,7 @@ public class Commande {
     private Boolean Affected;//1 bch twali livraison
 @OneToOne
     private CART Commande_cart;
-@ManyToOne(cascade = CascadeType.ALL)
+@OneToOne(cascade = CascadeType.ALL)
     private Livraison Livraison_commande;
 
 

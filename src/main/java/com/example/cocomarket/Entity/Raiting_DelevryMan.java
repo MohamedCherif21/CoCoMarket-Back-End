@@ -1,4 +1,5 @@
 package com.example.cocomarket.Entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,6 +20,7 @@ public class Raiting_DelevryMan {
     private String feedBack;
     private Integer Score;
     @OneToMany
+    @JsonIgnore
     private Set<User> Rating_User;
 
 }
