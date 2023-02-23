@@ -27,10 +27,10 @@ public class Livraison {
     @Enumerated(EnumType.STRING)
     private Etat_Livraison etat;
     @JsonIgnore
-    @OneToOne(mappedBy = "Livraison_commande")
-    private Commande Command_liv;
+    @ManyToMany(mappedBy = "Livraison_commande")
+    private Set<Commande> Command_liv;
     @JsonIgnore
-    @OneToMany
-    private Set<Raiting_DelevryMan> Rating_Liv;
+    @OneToOne
+    private Raiting_DelevryMan Rating_Liv;
 
 }

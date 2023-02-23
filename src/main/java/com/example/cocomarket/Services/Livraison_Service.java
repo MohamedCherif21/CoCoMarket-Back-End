@@ -1,8 +1,10 @@
 package com.example.cocomarket.Services;
 
 import com.example.cocomarket.Entity.Livraison;
+import com.example.cocomarket.Entity.Raiting_DelevryMan;
 import com.example.cocomarket.Interfaces.ILivraison;
 import com.example.cocomarket.Repository.Livraison_Repository;
+import com.example.cocomarket.Repository.Raiting_DelevryMan_Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,8 @@ import java.util.List;
 public class Livraison_Service implements ILivraison {
 @Autowired
     Livraison_Repository lr;
+    @Autowired
+    Raiting_DelevryMan_Repository rr;
 
     @Override
     public Livraison addLivraison(Livraison l) {
@@ -37,4 +41,13 @@ return lr.save(l);   }
     public List<Livraison> retrieveAllLiv() {
         return lr.findAll();
     }
+
+    @Override
+    public Raiting_DelevryMan affecterrattingtolivaison(Integer id_l, Raiting_DelevryMan r) {
+      Livraison lv =  lr.findById(id_l).orElse(null);
+        lv.setRating_Liv(r);
+        return rr.save(r);
+
+    }
+
 }
