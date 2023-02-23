@@ -1,6 +1,8 @@
 package com.example.cocomarket.Entity;
 
 import java.time.LocalDate;
+import java.util.Set;
+
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,8 +30,8 @@ public class Commande {
     private Boolean Affected;//1 bch twali livraison
 @OneToOne
     private CART Commande_cart;
-@OneToOne(cascade = CascadeType.ALL)
-    private Livraison Livraison_commande;
+@ManyToMany(cascade = CascadeType.ALL)
+    private Set<Livraison> Livraison_commande;
 
 
 }

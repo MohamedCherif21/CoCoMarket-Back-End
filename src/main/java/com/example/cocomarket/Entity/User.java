@@ -1,5 +1,6 @@
 package com.example.cocomarket.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -40,6 +41,8 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Raiting_Product> raiting_products;
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ToString.Exclude
     private Set<Livraison> Livraisons;
 
 
