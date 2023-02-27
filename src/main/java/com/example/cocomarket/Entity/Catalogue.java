@@ -2,6 +2,7 @@ package com.example.cocomarket.Entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -19,7 +20,14 @@ public class Catalogue {
     private String nom;
     private  String description;
     private   String img;
-    @ManyToMany(mappedBy = "Catalogues")
-    private Set<Produit> Produits_Cats;
 
+    @ManyToMany
+    @JoinTable(name = "catalogue_produit",
+            joinColumns = @JoinColumn(name = "catalogue_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "produit_id", referencedColumnName = "id"))
+    private Set<Produit> produits = new HashSet<>();
+
+    public Catalogue(String top_selling_products, String s) {
+
+    }
 }
