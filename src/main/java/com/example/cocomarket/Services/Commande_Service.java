@@ -18,7 +18,7 @@ public class Commande_Service implements ICommande {
     @Override
     public Livraison affectercamandtolivaison(Integer id_c,Livraison l) {
         Commande c=cr.getnotaffectedCommand(id_c);
-        c.setLivraison_commande(l);
+       //c.setLivraison_commande(l);
         return lr.save(l);
 
         }

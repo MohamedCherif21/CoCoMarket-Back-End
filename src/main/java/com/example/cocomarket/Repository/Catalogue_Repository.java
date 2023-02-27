@@ -8,7 +8,6 @@ import java.util.List;
 
 @Repository
 public interface Catalogue_Repository extends JpaRepository<Catalogue, Integer> {
-    List<Catalogue> findByNom(String nom);
 
 
 }
