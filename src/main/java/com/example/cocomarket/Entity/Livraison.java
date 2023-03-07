@@ -24,10 +24,14 @@ public class Livraison {
     private Boolean validation;
     private LocalDate date_Arrive;
     private LocalDate date_Sortie;
+    private Float weightL;
+    private Float volumeL;
+    private String region;
+
     @Enumerated(EnumType.STRING)
     private Etat_Livraison etat;
     @JsonIgnore
-    @ManyToMany(mappedBy = "Livraison_commande")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "Livraison_commande")
     private Set<Commande> Command_liv;
     @JsonIgnore
     @OneToOne

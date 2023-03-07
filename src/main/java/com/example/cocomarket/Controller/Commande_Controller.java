@@ -6,15 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/commande")
 public class Commande_Controller {
     @Autowired
     ICommande ic;
-    @PostMapping("/add-assign-liv/{idC}")
+    @PutMapping("/add-assign-liv/{region}")
     @ResponseBody
     public Livraison addLivwithcommand(@RequestBody Livraison l,
-                                                      @PathVariable("idC") Integer idC)
+                                                      @PathVariable("region") String region)
     {
-        Livraison liv = ic.affectercamandtolivaison(idC,l);
+        Livraison liv = ic.affectercamandtolivaison(region,l);
         return liv;
     }
 }
