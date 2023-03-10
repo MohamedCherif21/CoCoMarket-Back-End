@@ -6,6 +6,7 @@ import com.example.cocomarket.Entity.Vehicule;
 import com.example.cocomarket.Interfaces.IVehicule;
 import com.example.cocomarket.Repository.Livraison_Repository;
 import com.example.cocomarket.Repository.Vehicule_Repository;
+import com.example.cocomarket.config.EmailSenderService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class Vehicule_Service implements IVehicule {
-
+EmailSenderService service;
     Vehicule_Repository vr;
 
     Livraison_Repository lr;
@@ -63,6 +64,7 @@ vr.deleteById(idV);
           }
           v.getUser_car().setAvailability(false);
           vr.save(v);
+        service.sendSimpleEmail(v.getUser_car().getEmail(),"you got new mission go check it  :","New mission ");
       }
 
 
@@ -83,7 +85,9 @@ vr.deleteById(idV);
             i.setDate_Arrive(LocalDate.now());
             i.setEtat(Etat_Livraison.valueOf("Livrer"));
             i.setValidation(true);
+            lr.save(i);
         }
+         vr.save(v);
     }
 
 
