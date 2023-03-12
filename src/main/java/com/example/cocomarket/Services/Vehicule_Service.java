@@ -60,6 +60,8 @@ vr.deleteById(idV);
              v.getLiv_car().add(j);
              j.setEtat(Etat_Livraison.valueOf("Prise_en_compte"));
 
+            }else {
+                System.out.println("try again after few moment");
             }
           }
           v.getUser_car().setAvailability(false);
