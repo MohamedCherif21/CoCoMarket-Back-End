@@ -3,6 +3,7 @@ package com.example.cocomarket.Entity;
 import java.time.LocalDate;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ public class Contrat {
     private LocalDate dateDebutContrat;
     private LocalDate dateFinContrat;
     private Boolean archive;
+    @JsonIgnore
     @OneToMany(mappedBy = "Contrat_shop")
     private Set<Shop> Shopes_Contrats;
 }
