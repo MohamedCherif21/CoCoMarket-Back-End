@@ -20,6 +20,7 @@ public class Commande_Service implements ICommande {
     @Autowired
     Livraison_Repository lr;
     @Override
+
     public Livraison affectercamandtolivaison(String Region,Livraison l) {
         List<Commande> c=cr.getnotaffectedCommand(Region);
         LocalDate d;
@@ -38,6 +39,7 @@ public class Commande_Service implements ICommande {
         l.setDate_Sortie(d);
         lr.save(l);
         return l;
+
         }
 
 
