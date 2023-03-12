@@ -1,7 +1,7 @@
 package com.example.cocomarket.Controller;
 
 import com.example.cocomarket.Entity.Catalogue;
-import com.example.cocomarket.Entity.Produit;
+
 import com.example.cocomarket.Repository.Catalogue_Repository;
 import com.example.cocomarket.Repository.Produit__Repository;
 import com.example.cocomarket.Services.Catalogue_Service;
@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
+
 import java.util.*;
 
 
