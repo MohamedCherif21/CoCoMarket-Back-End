@@ -16,6 +16,8 @@ public interface Produit__Repository extends JpaRepository<Produit, Integer> {
 
     List<Produit> findTop50ByOrderByQuantiteVendueDesc();
 
+  //  Produit findByCategories ( Integer idCategtorie) ;
+
 
 
 }
