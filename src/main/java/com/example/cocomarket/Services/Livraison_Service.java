@@ -50,4 +50,9 @@ return lr.save(l);   }
 
     }
 
+    @Override
+    public List<Livraison> notaffected(String region) {
+        return lr.getnotaffectedLivraison(region);
+    }
+
 }

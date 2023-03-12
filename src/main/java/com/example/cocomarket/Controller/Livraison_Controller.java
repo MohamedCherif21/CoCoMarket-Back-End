@@ -46,4 +46,9 @@ public class Livraison_Controller {
         Raiting_DelevryMan ratting = il.affecterrattingtolivaison(idL,l);
         return ratting;
     }
+    @GetMapping("/retrieve-Liv-notaffected/{region}")
+    public  List<Livraison> getlivnotaffected(@PathVariable("region") String region) {
+       List <Livraison> Liv = il.notaffected(region);
+        return Liv;
+    }
 }

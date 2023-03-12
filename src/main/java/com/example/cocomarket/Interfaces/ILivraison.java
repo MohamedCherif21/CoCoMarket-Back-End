@@ -12,6 +12,6 @@ public interface ILivraison {
     void deleteLiv(Integer idLiv);
     public List<Livraison> retrieveAllLiv();
     public Raiting_DelevryMan affecterrattingtolivaison(Integer id_l, Raiting_DelevryMan l);
-
+     public List<Livraison> notaffected(String region);
 
 }

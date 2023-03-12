@@ -26,6 +26,8 @@ public class User {
     private String Assosiation_info;
     private String FilesImg;
     private String img;
+    private String region;
+    private Boolean availability;
     @OneToMany(mappedBy = "userQuestions" ,cascade = CascadeType.ALL)
     private Set<Question> Questions;
     @OneToMany(cascade = CascadeType.ALL)
@@ -40,10 +42,9 @@ public class User {
     private CART cart;
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Raiting_Product> raiting_products;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JsonIgnore
-    @ToString.Exclude
-    private Set<Livraison> Livraisons;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Vehicule car;
+
 
 
 

@@ -1,5 +1,8 @@
 package com.example.cocomarket.Interfaces;
 
+import com.example.cocomarket.Entity.Vehicule;
+
 public interface IUser {
-    public void assignusertodelivery (Integer LId, Integer UId);
+    public void assignusertoCar (Integer LId, Integer UId);
+    public Vehicule assignusertoCarCreate (Integer UId, Vehicule v);
 }

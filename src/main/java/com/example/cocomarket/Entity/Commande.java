@@ -28,10 +28,13 @@ public class Commande {
     private String description;
     private Boolean archive;
     private Boolean Affected;//1 bch twali livraison
+    private String regionClient;
+    private Float SommeWeight ;
+    private Float SommeVolume;
 @OneToOne
     private CART Commande_cart;
-@ManyToMany(cascade = CascadeType.ALL)
-    private Set<Livraison> Livraison_commande;
+@ManyToOne
+    private Livraison Livraison_commande;
 
 
 }
