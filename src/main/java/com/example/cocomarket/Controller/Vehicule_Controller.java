@@ -4,6 +4,7 @@ import com.example.cocomarket.Entity.Livraison;
 import com.example.cocomarket.Entity.Vehicule;
 import com.example.cocomarket.Interfaces.IVehicule;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class Vehicule_Controller {
     iv.deleteVehicule(idc);
     }
     @GetMapping("/retrieve-all-Cars")
+    @PreAuthorize("hasAuthority('DELEVRY')")
     public List<Vehicule> getlivs() {
         List<Vehicule> listLiv = iv.retrieveAllVehicule();
         return listLiv;
