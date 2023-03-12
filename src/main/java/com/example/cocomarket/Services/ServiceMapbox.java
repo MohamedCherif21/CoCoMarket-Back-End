@@ -14,7 +14,7 @@ public class ServiceMapbox implements IServiceMapbox {
 
     @Override
     public Map<String , String> getInfo(String x1 , String y1 , String x2 , String y2) throws IOException {
-        URL url = new URL("https://api.mapbox.com/directions/v5/mapbox/driving/"+x1+"%2C"+y1+"%3B"+x2+"%2C"+y2+"?access_token=pk.eyJ1IjoibmFzcmVkZGluZTEyMzQiLCJhIjoiY2xlaDU4OHJyMTdkejNvb3lkenhtOXlyeSJ9.57G8_EmIkUVPPjPNfT71jw");
+        URL url = new URL("https://api.mapbox.com/directions/v5/mapbox/driving/"+x1+"%2C"+y1+"%3B"+x2+"%2C"+y2+"?access_token=sk.eyJ1IjoibWVkYW1pbmU0NyIsImEiOiJjbGY1YjdxNTExYXN6M3ByMDk0YjRjMjNrIn0.rsdLr7PwojAwLYD2V4dLnA");
         Map<String, String> result = new HashMap<>();
         ObjectMapper objectMapper = new ObjectMapper();
         Object object = objectMapper.readValue(url, Object.class);
