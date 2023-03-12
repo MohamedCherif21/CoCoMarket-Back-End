@@ -16,9 +16,27 @@ public class MSG {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @NonNull
     private Integer id;
-    private String body;
-    private String object;
-    private String msg;
+    private String content;
+    private String sender;
+    private MessageType type;
+
+
+
+
+
+
+    public String getContent() {
+        return content;
+    }
+    public MSG(String content) {
+        this.content = content;
+    }
+
+
+
+    public enum MessageType {
+        CHAT, LEAVE, JOIN
+    }
     @ManyToOne(cascade = CascadeType.ALL)
     private User userMsg;
 }
