@@ -1,8 +1,10 @@
 package com.example.cocomarket.Entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,21 +21,45 @@ public class Commande {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @NonNull
-    private Integer id;
-    private LocalDate dateCmd;
+    private int id;
+
+    private LocalDateTime dateCmd;
+
     private String shop_name;
-    private String buyer_name;
-    private Float tax;
-    private Float totale;
-    private String description;
+    private String shop_address;
+
+    private String buyer_email;
+    private String buyer_address;
+
+    private double tax;
+
+    private Integer nbProd;
+    private Long total_price;
+    private String currency;
+    private float total_weight ;
+    private float SommeVolume ;
+
     private Boolean archive;
-    private Boolean Affected;//1 bch twali livraison
-    private String regionClient;
-    private Float SommeWeight ;
-    private Float SommeVolume;
-@OneToOne
+
+    private String description;
+
+    @Enumerated(EnumType.STRING)
+    private Etat etat;//1 bch twali livraison
+
+    @Enumerated(EnumType.STRING)
+    private Payment_Mode payment_mode;
+
+    private  String methode ;
+
+
+
+    @ManyToOne
+    @JsonIgnore
+    @ToString.Exclude
     private CART Commande_cart;
-@ManyToOne
+
+    @ManyToOne
+    @JsonIgnore
     private Livraison Livraison_commande;
 
 

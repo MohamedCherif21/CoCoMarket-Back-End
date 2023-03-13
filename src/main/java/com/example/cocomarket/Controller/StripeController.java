@@ -1,80 +1,52 @@
 package com.example.cocomarket.Controller;
 
 import com.example.cocomarket.Entity.Commande;
-import com.example.cocomarket.Entity.Livraison;
 import com.example.cocomarket.Entity.Produit_Cart;
-import com.example.cocomarket.Interfaces.ICommande;
+import com.example.cocomarket.Interfaces.StripeService;
 import com.example.cocomarket.Repository.Commande_Repository;
-import com.example.cocomarket.Services.Commande_Service;
 import com.lowagie.text.Document;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
+import com.stripe.exception.StripeException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
-import java.util.List;
 
 @RestController
-@RequestMapping("/commande")
-public class Commande_Controller {
+@RequestMapping("/stripe)")
+@Slf4j
+public class StripeController {
+
+
     @Autowired
-    ICommande ic;
+    private StripeService stripeService;
+
     @Autowired
-    Commande_Service Cr ;
-    @Autowired
-    Commande_Repository commande_repository;
+    private Commande_Repository cr ;
 
-    @PutMapping("/add-assign-liv/{region}")
-    @ResponseBody
-    public Livraison addLivwithcommand(@RequestBody Livraison l,
-                                                      @PathVariable("region") String region)
-    {
-        Livraison liv = ic.affectercamandtolivaison(region,l);
-        return liv;
+    public StripeController(StripeService stripeService) {
+        this.stripeService = stripeService;
     }
 
-    @PostMapping("/Confirm-Commande/{idcart}")
-    public Commande confirm_Commande(@RequestBody Commande c,
-                                     @PathVariable("idcart") Integer idcart)  {
-        return Cr.Confirmer_Commande(c,idcart);
-
-    }
-
-    @DeleteMapping("/remove-Commande/{Commande-id}")
-    public void removeCommande(@PathVariable("Commande-id") Integer IdCommande) {
-        Cr.Annuler_Commande(IdCommande);
-    }
-
-
-
-    @GetMapping("/retrieve-Commande/{Commande-id}")
-    public Commande retrieveCommande(@PathVariable("Commande-id") Integer IdCommande) {
-        return Cr.Afficher_Commandes(IdCommande);
-    }
-
-
-    @GetMapping("/retrieve-all-Commandes")
-    public List<Commande> getCommandes() {
-        return Cr.Afficher_AllCommandes();
-
-    }
-
-
-    @GetMapping("/research")
-    public List<Commande> rechercher(@RequestParam("q") String parametre) {
-        return Cr.rechercher(parametre);
-    }
-
-    @GetMapping("/facture/{commandId}")
-    public void generateInvoice(@PathVariable Integer commandId, HttpServletResponse response) throws Exception {
-        // récupérer les informations de la commande à partir de votre base de données
-        Commande order = commande_repository.findById(commandId).get();
-
+    @PostMapping("/paiement")
+    public ResponseEntity<String> effectuerPaiement(@RequestParam("commandeId") Integer commandeId,
+                                                    @RequestParam("devise") String devise,
+                                                    @RequestParam("token") String token ,HttpServletResponse response) throws StripeException, IOException {
+        Commande order = cr.findById(commandeId).get();
+        stripeService.effectuerPaiement(order.getTotal_price(), devise, token);
+       // System.out.println("paiement effectué avec succés, vous pouvez télécharger votre facture");
         // création du document PDF
         Document document = new Document(PageSize.A4);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -100,7 +72,6 @@ public class Commande_Controller {
 
         // ajouter le total de la facture
         document.add(new Paragraph("Total: " + order.getTotal_price()));
-
         document.close();
 
         // envoi du document PDF en réponse
@@ -111,5 +82,7 @@ public class Commande_Controller {
         outStream.write(out.toByteArray());
         outStream.flush();
         outStream.close();
+        return new ResponseEntity<>("paiement effectué avec succés, vous pouvez télécharger votre facture", HttpStatus.OK);
     }
 }
+

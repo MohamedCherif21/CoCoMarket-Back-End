@@ -6,6 +6,7 @@ import com.example.cocomarket.Repository.User_Repository;
 import com.example.cocomarket.config.EmailSenderService;
 import com.example.cocomarket.config.JwtService;
 import com.example.cocomarket.token.TokenRepository;
+//import lombok.RequiredArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
