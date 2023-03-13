@@ -6,10 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+ import java.util.*;
 
 @Entity
 @Getter
@@ -36,6 +33,8 @@ public class User implements UserDetails {
     private Boolean enabled;
     private Integer nbr_tentatives;
     private Boolean availability;
+    private Date sleep_time;
+    private long num_phone;
     @OneToMany(mappedBy = "userPublication" ,cascade = CascadeType.ALL)
     private Set<Publication> publications;
     @OneToMany(cascade = CascadeType.ALL)

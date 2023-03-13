@@ -13,8 +13,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -30,15 +37,13 @@ public class AuthenticationController {
 
   private final AuthenticationService serviceAuth;
 
-  @PostMapping("/register")
-  public ResponseEntity<AuthenticationResponse> register(
-      @RequestBody User request
-  ) {
-    return ResponseEntity.ok(serviceAuth.register(request));
+  @PostMapping(path = "/register",consumes = {MULTIPART_FORM_DATA_VALUE})
+  public ResponseEntity<AuthenticationResponse> register(@RequestParam String request,@RequestParam MultipartFile file) throws IOException {
+    return ResponseEntity.ok(serviceAuth.register(request,file));
   }
   @PostMapping("/authenticate")
   public Authentication authenticate(
-      @RequestBody AuthenticationRequest request
+          @RequestBody AuthenticationRequest request
   ) {
     return serviceAuth.authenticate(request);
   }
@@ -85,17 +90,16 @@ public class AuthenticationController {
     // this will convert any number sequence into 6 character.
     return String.format("%06d", number);
   }
-    //---------------------------------------
-    @Autowired
+  //---------------------------------------
+  @Autowired
   private AuthorityRepository AuhtRepo;
   @Autowired
   private TokenRepository tokenRepo;
   @Autowired
   private JwtService jwtService;
   @GetMapping("/GetNbrUserByRole/{role}")
-  public int NbrUsers(@PathVariable String role){
-
-    return AuhtRepo.findAllValidTokenByUser(role);
+  public List<User> NbrUsers(@PathVariable String role){
+    return AuhtRepo.findAllUserByRole(role);
   }
 
   /*@GetMapping("/GetTokenValide/{}")
@@ -110,6 +114,27 @@ public class AuthenticationController {
     }
     return tokenRepo.findAllValidToken();
   }*/
+  // @Scheduled(cron="*/5 * * * * *")
+  //@Scheduled(fixedRate = 30000)
+  @PutMapping(value = "/WakeUpAccount")
+  public void retrieveAndUpdateStatusContrat(){
+    Date d = new Date(System.currentTimeMillis());
+
+    List<User> Users=UserRepo.findAll();
+    for ( User u: Users)
+      if(u.getSleep_time() !=null) {
+        long elapsedms = Math.abs(d.getTime() - u.getSleep_time().getTime());
+        long diff = TimeUnit.MINUTES.convert(elapsedms, TimeUnit.MILLISECONDS);
+        System.out.println("Diference  :" + diff);
+        if (diff >=30 ){
+          u.setEnabled(false);
+          u.setNbr_tentatives(0);
+          u.setSleep_time(null);
+          UserRepo.save(u);
+        }
+      }
+    //
+  }
 
 
 }
