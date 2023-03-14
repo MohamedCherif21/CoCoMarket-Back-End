@@ -128,17 +128,17 @@ public class CocoController {
         return ResponseEntity.ok(catalogue);
     }
 
-    //@Scheduled(cron="*/1 * * * * *")
+    @Scheduled(cron="*/1 * * * * *")
     @PostMapping("/top-rated-products")
-    public ResponseEntity<String> createTopRatedProductsCatalogue() throws IOException, WriterException, com.google.zxing.WriterException {
+    public ResponseEntity<String> createTopRatedProductsCatalogue()  {
         catalogueService.createTopRatedProductsCatalogue();
         return ResponseEntity.status(HttpStatus.CREATED).body("Catalogue créé avec succès.");
     }
 
 
-    //@Scheduled(cron="*/1 * * * * *")
+    @Scheduled(cron="*/1 * * * * *")
     @PostMapping("/latest-products")
-    public ResponseEntity<Catalogue> createLatestProductsCatalogue() throws IOException, WriterException, com.google.zxing.WriterException {
+    public ResponseEntity<Catalogue> createLatestProductsCatalogue()  {
         Catalogue catalogue = catalogueService.createLatestProductsCatalogue();
         return ResponseEntity.ok(catalogue);
     }

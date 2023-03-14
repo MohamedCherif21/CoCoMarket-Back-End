@@ -16,6 +16,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 
+import org.apache.naming.factory.SendMailFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -120,19 +121,23 @@ public class Catalogue_Service implements ICatalogue {
         Set<Produit> produits = new HashSet<>(top50Produits);
         catalogue.setProduits(produits);
 
+        senderService.sendSimpleEmail("hamza.amdouni@esprit.tn","kjnjkn","kjjkhjk");
 
+
+        /*byte[] qrCode = generateQRCode(catalogue);
+        catalogue.setQrCode(qrCode);*/
         return catalogueRepository.save(catalogue);
     }
 
 
 
-    public void createTopRatedProductsCatalogue() throws IOException, WriterException, com.google.zxing.WriterException {
+    public void createTopRatedProductsCatalogue() {
         // Récupérer les 5 produits les mieux notés
         List<Produit> topRatedProducts = produitRepository.findAll()
                 .stream()
                 .filter(p -> p.getRaiting_prod() != null && !p.getRaiting_prod().isEmpty())
                 .sorted(Comparator.comparing(p -> -getAverageScore(p)))
-                .limit(10)
+                .limit(2)
                 .collect(Collectors.toList());
 
         // Créer le catalogue contenant les 5 produits les mieux notés
@@ -142,9 +147,9 @@ public class Catalogue_Service implements ICatalogue {
         topRatedProductsCatalogue.setImg("https://example.com/top-rated-products.png");
         topRatedProductsCatalogue.setProduits(new HashSet<>(topRatedProducts));
 
-        byte[] qrCode = generateQRCode(topRatedProductsCatalogue);
+       /* byte[] qrCode = generateQRCode(topRatedProductsCatalogue);
         topRatedProductsCatalogue.setQrCode(qrCode);
-        // Enregistrer le catalogue dans la base de données
+        // Enregistrer le catalogue dans la base de données*/
         catalogueRepository.save(topRatedProductsCatalogue);
     }
 
@@ -155,7 +160,7 @@ public class Catalogue_Service implements ICatalogue {
                 .orElse(0.0);
     }
 
-    public Catalogue createLatestProductsCatalogue() throws IOException, WriterException, com.google.zxing.WriterException {
+    public Catalogue createLatestProductsCatalogue()  {
         int last = catalogueRepository.findLastCatalogueId();
         int first = catalogueRepository.findFirstCatalogueId();
         Catalogue catalogue = new Catalogue();
@@ -167,8 +172,8 @@ public class Catalogue_Service implements ICatalogue {
         catalogue.setProduits(new HashSet<>(latestProducts));
 
 
-        byte[] qrCode = generateQRCode(catalogue);
-        catalogue.setQrCode(qrCode);
+        /*byte[] qrCode = generateQRCode(catalogue);
+        catalogue.setQrCode(qrCode);*/
 
         return catalogueRepository.save(catalogue);
 
@@ -189,7 +194,7 @@ public class Catalogue_Service implements ICatalogue {
         return catalogueRepository.save(catalogue);
     }
 
-    public Catalogue createPromoCatalogue(String nom, String description, String img, Integer pourcentagePromotion) throws IOException, WriterException, com.google.zxing.WriterException {
+    public Catalogue createPromoCatalogue(String nom, String description, String img, Integer pourcentagePromotion) {
 
         Catalogue catalogue = new Catalogue();
         catalogue.setNom(nom);
