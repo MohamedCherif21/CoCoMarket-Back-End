@@ -48,6 +48,9 @@ public class Produit {
 
     private Integer pourcentagePromotion;
 
+    private Boolean isFlashSale;
+    private Boolean isPromotion;
+    private Float prixPromotion;
     // Constructeurs
     public Produit(String Reference, String nom, String img, String description, Long prix, Boolean EtatsProduit,
                    Status status, LocalDate datePublication, Set<Raiting_Product> raiting_prod, Categorie Categories,

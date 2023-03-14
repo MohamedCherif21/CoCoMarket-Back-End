@@ -15,4 +15,7 @@ public interface Commande_Repository extends JpaRepository<Commande, Integer> {
     @Query("SELECT c FROM Commande c where c.buyer_address = :region and c.etat=:WAITING ")
     public List<Commande> getnotaffectedCommand(@Param("region") String region);
 
+    @Query("SELECT c FROM Commande c where c.etat =: WAITING ")
+    public Commande traiterCommand();
+
 }

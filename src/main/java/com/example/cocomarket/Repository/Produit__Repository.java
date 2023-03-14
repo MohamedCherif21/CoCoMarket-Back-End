@@ -19,6 +19,16 @@ public interface Produit__Repository extends JpaRepository<Produit, Integer> {
   //  Produit findByCategories ( Integer idCategtorie) ;
 
 
+    //  Produit findByCategories ( Integer idCategtorie) ;
+
+
+
+
+    List<Produit> findTop10ByOrderByDatePublicationDesc();
+
+    List<Produit> findByPourcentagePromotionGreaterThan(int i);
+
+
 
 }
 

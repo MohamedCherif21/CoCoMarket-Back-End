@@ -124,6 +124,16 @@ public class Produit__Service implements IProduit {
     }
 
 
+    public List<Produit> getProduitsByIds(List<Integer> productIds) {
+        List<Produit> produits = new ArrayList<>();
+        for (Integer id : productIds) {
+            Optional<Produit> produit = produitRepository.findById(id);
+            if (produit.isPresent()) {
+                produits.add(produit.get());
+            }
+        }
+        return produits;
+    }
 
 
 

@@ -20,6 +20,8 @@ public class Catalogue {
     private String nom;
     private  String description;
     private   String img;
+    private byte[] QrCode;
+
 
     @ManyToMany
     @JoinTable(name = "catalogue_produit",
@@ -27,7 +29,5 @@ public class Catalogue {
             inverseJoinColumns = @JoinColumn(name = "produit_id", referencedColumnName = "id"))
     private Set<Produit> produits = new HashSet<>();
 
-    public Catalogue(String top_selling_products, String s) {
 
-    }
 }
