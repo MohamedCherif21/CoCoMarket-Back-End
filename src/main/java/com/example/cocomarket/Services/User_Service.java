@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class User_Service implements IUser {
     @Autowired
@@ -22,6 +25,8 @@ public class User_Service implements IUser {
     @Autowired
     EmailSenderService mailserv ;
 
+    @Autowired
+    AuthorityRepository Ar;
 
     @Override
     public void assignusertoCar(Integer LId, Integer UId) {
@@ -56,6 +61,17 @@ public class User_Service implements IUser {
         commande.setEtat(Etat.REFUSED);
         //send mail avec motif de refus
         mailserv.sendSimpleEmail(commande.getBuyer_email(),"your order has been Rejected","order rejection");
+    }
+
+    public List<User> GetUserByRole(String role) {
+        List<Autority> auths=Ar.findAll();
+        List<User> users=new ArrayList<>();
+        for (Autority a :auths){
+            if (a.getName().equals(role))
+                users.add(a.getUserAuth());
+
+        }
+        return users;
     }
 
 }

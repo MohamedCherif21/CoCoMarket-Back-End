@@ -3,6 +3,7 @@ package com.example.cocomarket.Controller;
 import com.example.cocomarket.Entity.Livraison;
 import com.example.cocomarket.Entity.Vehicule;
 import com.example.cocomarket.Interfaces.IVehicule;
+import com.example.cocomarket.Repository.Vehicule_Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,8 @@ import java.util.List;
 public class Vehicule_Controller {
     @Autowired
     IVehicule iv;
+    @Autowired
+    Vehicule_Repository vr;
     @PostMapping("/add-Car")
     public Vehicule addCar(@RequestBody Vehicule l) {
         Vehicule li = iv.addVehicule(l);
@@ -58,4 +61,13 @@ public class Vehicule_Controller {
     {
         iv.validatemission(id);
     }
+    @GetMapping("/getliv-byid/{id}")
+    public List<Livraison>getLiv(@PathVariable("id") Integer id){
+        List<Livraison> l ;
+        Vehicule v=vr.getusertovalidate(id);
+
+        List<Livraison> lv= v.getLiv_car();
+        return  lv;
+    }
+
 }

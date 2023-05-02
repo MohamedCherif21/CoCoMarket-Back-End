@@ -20,7 +20,7 @@ public class Produit_Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
-    private Integer quantity=0 ;
+    private Integer quantity;
     
     @ManyToOne
     private CART cart ;

@@ -22,7 +22,7 @@ public class CART implements Serializable {
     private Integer nbProd;
     private Long total_price;
     private Float total_weight;
-
+    private Float total_volume ;
     /*@ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "table_associative",

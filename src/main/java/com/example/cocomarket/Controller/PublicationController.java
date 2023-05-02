@@ -35,7 +35,7 @@ public class PublicationController {
     }
 
 
-    @PostMapping("/{userId}/publications")
+    @PostMapping("/publications/{userId}")
     public ResponseEntity<String> ajouterPublication(@PathVariable Integer userId, @RequestBody Publication publication) {
         publicationService.ajouterPublication(userId, publication);
         return new ResponseEntity<>("La publication a été ajoutée avec succès.", HttpStatus.CREATED);

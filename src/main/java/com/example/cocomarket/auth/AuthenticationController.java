@@ -1,5 +1,6 @@
 package com.example.cocomarket.auth;
 
+import com.example.cocomarket.Entity.Autority;
 import com.example.cocomarket.Entity.User;
 import com.example.cocomarket.Repository.AuthorityRepository;
 import com.example.cocomarket.Repository.User_Repository;
@@ -16,13 +17,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
-
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
@@ -41,8 +40,13 @@ public class AuthenticationController {
   public ResponseEntity<AuthenticationResponse> register(@RequestParam String request,@RequestParam MultipartFile file) throws IOException {
     return ResponseEntity.ok(serviceAuth.register(request,file));
   }
+  @PutMapping(path = "/update",consumes = {MULTIPART_FORM_DATA_VALUE})
+  public String update(@RequestParam String request,@RequestParam(required = false) MultipartFile file) throws IOException {
+    return serviceAuth.update(request,file);
+  }
+
   @PostMapping("/authenticate")
-  public Authentication authenticate(
+  public JwtResponse authenticate(
           @RequestBody AuthenticationRequest request
   ) {
     return serviceAuth.authenticate(request);
@@ -80,7 +84,12 @@ public class AuthenticationController {
     else
       return "-______-  ' Failed to Update Psw of this account '   -_______-";
   }
-
+  @GetMapping("/VerifierCode/{code}")
+  public boolean coparison(@PathVariable String code){
+    if (this.CodeRecived.compareTo(code) == 0 )
+      return true;
+    return false;
+  }
   public static String getRandomNumberString() {
     // It will generate 6 digit random Number.
     // from 0 to 999999
@@ -98,22 +107,58 @@ public class AuthenticationController {
   @Autowired
   private JwtService jwtService;
   @GetMapping("/GetNbrUserByRole/{role}")
-  public List<User> NbrUsers(@PathVariable String role){
+  public List<Autority> NbrUsers(@PathVariable String role){
     return AuhtRepo.findAllUserByRole(role);
   }
 
-  /*@GetMapping("/GetTokenValide/{}")
-  public List<Token> GetTokenV(){
-    List<Token> TokenMriglin=tokenRepo.findAllValidToken();
+  @GetMapping("/GetConnectedUserNow")
+  public List<User> GetConnectedNow(){
+    List<Integer> TokenMriglin=tokenRepo.retrieveIdUserConecter();
     Date d = new Date(System.currentTimeMillis());
-    for (Token T : TokenMriglin){
-      if(! T.user.getDate().before(d)){
-
-      }
-     //System.out.println("Experation :"+ jwtService.isTokenValid(T.token,T.user));
+    List<User> userconnects=new ArrayList<>();
+    for (Integer T : TokenMriglin){
+      userconnects.add(UserRepo.findById(T).orElse(null));
+      System.out.println("ID USER Connected :"+ T);
     }
-    return tokenRepo.findAllValidToken();
-  }*/
+    for (User u : userconnects){
+      System.out.println("Connected :"+u.getEmail());
+    }
+    return userconnects;
+  }
+
+  @GetMapping("/GetConnectedUserNowWithRole/{role}")
+  public List<User> GetConnectedRole(@PathVariable String role){
+    List<Integer> TokenMriglin=tokenRepo.retrieveIdUserConecter();
+    Date d = new Date(System.currentTimeMillis());
+    List<User> userconnects=new ArrayList<>();
+    List<User> userconnectswithRole=new ArrayList<>();
+    for (Integer T : TokenMriglin){
+      userconnects.add(UserRepo.findById(T).orElse(null));
+      System.out.println("ID USER Connected :"+ T);
+    }
+    for (User u : userconnects){
+      if(u!= null){
+        System.out.println("Connected :"+u.getEmail());
+        System.out.println("Connected Has Role :"+HasThisRole(u,role));
+        if (HasThisRole(u,role)){
+          userconnectswithRole.add(u);
+
+        }}
+
+    }
+    return userconnectswithRole;
+  }
+
+  public static boolean HasThisRole(User u,String Role){
+    boolean test=false;
+    Set<Autority> auths=u.getAutority();
+    for(Autority a : auths){
+      System.out.println("♥Here Is the Role :"+a.getName());
+      if (a.getName().compareTo(Role) == 0 )
+        return true;
+    }
+    return test;
+  }
   // @Scheduled(cron="*/5 * * * * *")
   //@Scheduled(fixedRate = 30000)
   @PutMapping(value = "/WakeUpAccount")
@@ -126,15 +171,35 @@ public class AuthenticationController {
         long elapsedms = Math.abs(d.getTime() - u.getSleep_time().getTime());
         long diff = TimeUnit.MINUTES.convert(elapsedms, TimeUnit.MILLISECONDS);
         System.out.println("Diference  :" + diff);
-        if (diff >=30 ){
+        if (diff >= 30) {
           u.setEnabled(false);
           u.setNbr_tentatives(0);
           u.setSleep_time(null);
           UserRepo.save(u);
         }
       }
-    //
   }
+  @GetMapping("/GetAllUser")
+  public List<User> GetAllUsers(){
+    return UserRepo.findAll();
+  }
+  @GetMapping("/GetthisUser/{id}")
+  public User GetAllUsers(@PathVariable int id){
+    return UserRepo.findById(id).orElse(null);
+  }
+  @PutMapping("/DisableUnDisabe/{id}")
+  public String DisabelAccount(@PathVariable int id){
+    User u= UserRepo.findById(id).orElse(null);
+    u.setEnabled(!u.getEnabled());
+    UserRepo.save(u);
+    return "Update";
+  }
+
+  @GetMapping("/GetbyMail/{email}")
+  public User GetUserByMail(@PathVariable  String email){
+    return UserRepo.FoundAcountBYMail(email);
+  }
+
 
 
 }

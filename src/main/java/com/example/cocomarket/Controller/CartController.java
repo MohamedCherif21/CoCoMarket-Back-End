@@ -1,24 +1,32 @@
 package com.example.cocomarket.Controller;
 
-import com.example.cocomarket.Entity.Produit;
-import com.example.cocomarket.Entity.Produit_Cart;
+import com.example.cocomarket.Entity.*;
+import com.example.cocomarket.Repository.Cart_Repository;
 import com.example.cocomarket.Repository.Commande_Repository;
 import com.example.cocomarket.Repository.Produit__Repository;
 import com.example.cocomarket.Services.Cart_Service;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 @RestController
 @Slf4j
 //@AllArgsConstructor
 @RequestMapping("/Cart")
+
 public class CartController {
 
     @Autowired
     Cart_Service cart_service;
+
+    @Autowired
+    Cart_Repository car ;
 
     @Autowired
     Commande_Repository cr ;
@@ -61,7 +69,7 @@ public class CartController {
     @DeleteMapping("/panier/supprimer-produit/{idProduit}/{idCart}")
     public void supprimerProduit(@PathVariable ("idProduit")Integer idProduit,
                                  @PathVariable ("idCart") Integer idCart) {
-            cart_service.Remove_Product(idProduit, idCart);
+        cart_service.Remove_Product(idProduit, idCart);
     }
 
     @GetMapping("/retrieve-Produit/{Cart-id}/{Produit-id}")
@@ -71,10 +79,68 @@ public class CartController {
     }
 
 
-    @GetMapping("/retrieve-Product_in_cart/{prodcart-id}")
-    public Set<Produit_Cart> retrieveProduct_in_cart(@PathVariable("prodcart-id") Integer IdCart) {
-        return cart_service.Retrive_All_Product_in_cart(IdCart);
+    @GetMapping("/retrieve-Product_in_cart/{idCart}")
+    public List<Produit> retrieveProduct_in_cart(@PathVariable("idCart") Integer IdCart) {
+        return cart_service.retrieveAllProductInCart(IdCart);
     }
+
+    @GetMapping("/cart/{cartId}/products")
+    public List<ProduitQuantiteDTO> retrieveAllProductInCart(@PathVariable Integer cartId) {
+        CART cart = car.findById(cartId).orElseThrow(null);
+        Set<Produit_Cart> items = cart.getItems();
+
+        List<ProduitQuantiteDTO> products = items.stream()
+                .map(produitCart -> new ProduitQuantiteDTO(
+                        produitCart.getProduit().getId(),
+                        produitCart.getProduit().getNom(),
+                        produitCart.getProduit().getPrix(),
+                        produitCart.getQuantity()))
+                .collect(Collectors.toList());
+
+        return products;
+    }
+
+    @GetMapping("/numProducts/{cartId}")
+    public Integer getNumProducts(@PathVariable("cartId") Integer cartId) {
+        // Récupérer le panier correspondant à l'ID donné
+        Optional<CART> optionalCart = car.findById(cartId);
+        // Récupérer le nombre de produits dans le panier à l'aide de la méthode "getNbProd()" de la classe CART
+        Integer numProducts = optionalCart.get().getNbProd();
+        // Renvoyer le nombre de produits dans le corps de la réponse HTTP avec un code 200 OK
+        return numProducts;
+    }
+
+    @GetMapping("/totalprice/{cartId}")
+    public Long gettotalprice(@PathVariable("cartId") Integer cartId) {
+        // Récupérer le panier correspondant à l'ID donné
+        Optional<CART> optionalCart = car.findById(cartId);
+        // Récupérer le nombre de produits dans le panier à l'aide de la méthode "getNbProd()" de la classe CART
+        Long totalprice = optionalCart.get().getTotal_price();
+        // Renvoyer le nombre de produits dans le corps de la réponse HTTP avec un code 200 OK
+        return totalprice;
+    }
+
+    @GetMapping("/{cartId}/productQuantities")
+    public ResponseEntity<Map<Integer, Integer>> getProductQuantities(@PathVariable Integer cartId) {
+        Map<Integer, Integer> productQuantities = Cart_Service.getProductQuantitiesByCartId(cartId);
+        return ResponseEntity.ok(productQuantities);
+    }
+
+    @GetMapping("/carts/{cartId}/products/names")
+    public List<String> getProductsNames(@PathVariable Integer cartId) {
+        CART cart = car.findById(cartId).orElseThrow(null);
+        List<String> productNames = new ArrayList<>();
+        for (Produit_Cart produitCart : cart.getItems()) {
+            productNames.add(produitCart.getProduit().getNom());
+        }
+        return productNames;
+    }
+}
+
+
+
+
+
 
 /**************************PAYPAL**********************************/
 
@@ -83,4 +149,4 @@ public class CartController {
 
 
 
-}
+

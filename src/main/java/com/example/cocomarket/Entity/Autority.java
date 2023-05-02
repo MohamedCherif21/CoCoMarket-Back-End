@@ -1,4 +1,5 @@
 package com.example.cocomarket.Entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,7 +19,7 @@ public class Autority {
     // @ManyToMany(mappedBy = "autoritys")
     // private Set<Roles> RolesAutority;
     @ManyToOne
-  //  @JsonIgnore
+    @JsonIgnore
     private User UserAuth;
 
 }

@@ -31,13 +31,14 @@ public class Commande {
     private String buyer_email;
     private String buyer_address;
 
-    private double tax;
+    private Long tax;
+    private String les_produits ;
 
     private Integer nbProd;
     private Long total_price;
     private String currency;
     private float total_weight ;
-    private float SommeVolume ;
+    private Float somme_volume;
 
     private Boolean archive;
 

@@ -4,6 +4,7 @@ import com.example.cocomarket.Entity.Autority;
 import com.example.cocomarket.Entity.User;
 import com.example.cocomarket.Repository.AuthorityRepository;
 import com.example.cocomarket.Repository.User_Repository;
+import com.example.cocomarket.Services.User_Service;
 import com.example.cocomarket.config.JwtService;
 import com.example.cocomarket.token.Token;
 import com.example.cocomarket.token.TokenRepository;
@@ -29,7 +30,8 @@ public class DemoController {
   @Autowired
   private TokenRepository tokenRepo;
 
-
+  @Autowired
+  private User_Service userService;
   @Autowired
   private User_Repository UserRepo;
 
@@ -53,14 +55,14 @@ public class DemoController {
 
   @Autowired
   private JwtService jwtUtils;
-
+  //--------------------- SESSION ----------------------------
   @GetMapping("/user")
-  public String getUserDetails(HttpServletRequest request) {
+  public User getUserDetails(HttpServletRequest request) {
     String token = getTokenFromRequest(request);
     String username = jwtUtils.getUsernameFromToken(token);
     // fetch user details using the username
     User user = UserRepo.FoundAcountBYMail(username);
-    return user.getEmail();
+    return user;
   }
   private String getTokenFromRequest(HttpServletRequest request) {
     String bearerToken = request.getHeader("Authorization");
@@ -69,28 +71,34 @@ public class DemoController {
     }
     return null;
   }
-  @GetMapping("/GetNbrUserByRole/{role}")
-  @PreAuthorize("hasAuthority('ADMIN')")
-  public List<User> NbrUsers(@PathVariable String role){
+  //--------------------- ^^^^  SESSION ^^^^^^   --------------------
 
-    return AuhtRepo.findAllUserByRole(role);
+
+
+
+
+
+  @GetMapping("/GetNbrUserByRole/{role}")
+  //@PreAuthorize("hasAuthority('ADMIN')")
+  public List<User> NbrUsers(@PathVariable String role){
+    return userService.GetUserByRole(role);
   }
+
   @GetMapping("/GetUserConnecterByRole/{role}")
-  @PreAuthorize("hasAuthority('ADMIN')")
+  // @PreAuthorize("hasAuthority('ADMIN')")
   public List<User> GetTokenV(@PathVariable String role){
     List<Token> TokenValide= tokenRepo.findAllValidToken();
 
     List<User> UserConnecter=new ArrayList<>();
     for (Token T:TokenValide){
       System.out.println("Token Valide :"+T.getToken());
-      for( Autority Auth : T.getUser().getAutority()){
-        System.out.println("Auth :"+Auth.getName());
-        if (  Auth.getName().equals(role)){
-          UserConnecter.add(T.getUser());
-        }
-      }
-
-
+      if(T.revoked == false && T.expired==false){
+        for( Autority Auth : T.getUser().getAutority()){
+          System.out.println("Auth :"+Auth.getName());
+          if (  Auth.getName().equals(role)){
+            UserConnecter.add(T.getUser());
+          }
+        }}
     }
     return UserConnecter;
   }

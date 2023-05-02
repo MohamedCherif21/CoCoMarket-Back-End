@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,22 +28,31 @@ public class Produit {
     private String description;
     private Long prix;
     private Float weight;
+    private Float volume ;
     private Boolean EtatsProduit;//mawjoud ou non
     @Enumerated(EnumType.STRING)
     private Status status;//ywefe9 3lih lbaye3 bch ybi3ou ou non//par default Null
     private LocalDate datePublication;
     @OneToMany(cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Raiting_Product> raiting_prod;
 
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
     private Categorie Categories;
 
     @ManyToOne
+    @JsonIgnore
     private Shop Shopes;
 
     @ManyToMany(mappedBy = "produits")
+    @JsonIgnore
     private Set<Catalogue> catalogues = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "produit")
+    @JsonIgnore
+    private Set<Produit_Cart> items;
 
     private Integer quantiteVendue;
 

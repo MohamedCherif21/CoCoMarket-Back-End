@@ -6,6 +6,7 @@ import com.example.cocomarket.Interfaces.*;
 import com.example.cocomarket.Repository.Produit__Repository;
 import com.example.cocomarket.Services.ContratPDFExport;
 import com.example.cocomarket.Services.Contrat_Service;
+import com.example.cocomarket.Services.Produit__Service;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
@@ -24,7 +25,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 @RestController
 public class SnoussiController {
 
@@ -44,9 +45,17 @@ public class SnoussiController {
     @Autowired
     IContrat contratinterface ;
 
+    @Autowired
+    private Produit__Service produitService;
+
+    @GetMapping("produits/cherif")
+    public List<Produit> getAllProduits() {
+        return produitService.getAllProduits();
+    }
+
 
     @GetMapping("shop")
-    @PreAuthorize("hasAuthority('Zebi')")
+   // @PreAuthorize("hasAuthority('')")
     public List<Shop> AfficherLesShop() {
         return shopinterface.AfficherLesShop();
     }

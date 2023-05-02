@@ -4,6 +4,7 @@ import com.example.cocomarket.Entity.CART;
 import com.example.cocomarket.Entity.Produit;
 import com.example.cocomarket.Entity.Produit_Cart;
 
+import java.util.List;
 import java.util.Set;
 
 public interface ICart {
@@ -14,5 +15,6 @@ public interface ICart {
 
      Produit retrive_one_Product(Integer idprodCart, Integer idProduit);
 
-     Set<Produit_Cart> Retrive_All_Product_in_cart(Integer idCart);
-}
+     public List<Produit> retrieveAllProductInCart(Integer cartId) ;
+
+     }
