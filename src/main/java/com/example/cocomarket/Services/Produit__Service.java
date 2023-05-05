@@ -23,8 +23,8 @@ public class Produit__Service implements IProduit {
     }
 
 
-       public Optional<Produit> getProduitByIds(Integer id) {
-            return Optional.ofNullable(produitRepository.findById(id).orElse(null));
+       public List<Produit> getProduitByIds(Integer id) {
+            return (List<Produit>) produitRepository.findById(id).orElse(null);
     }
     public List<Produit> getAllProduits() {
         return produitRepository.findAll();

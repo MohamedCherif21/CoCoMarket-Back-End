@@ -6,6 +6,7 @@ import com.example.cocomarket.Entity.Status;
 import com.example.cocomarket.Services.Produit__Service;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IProduit {
 
@@ -18,6 +19,8 @@ public interface IProduit {
     List<Produit> getAllProduits();
 
     public List<Produit> Recomendation(Integer idproduit , Integer idCateg ) ;
+
+    public List<Produit> getProduitByIds(Integer id) ;
 
 
 

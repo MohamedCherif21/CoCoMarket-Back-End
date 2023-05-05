@@ -69,13 +69,13 @@ public class KoffaController {
     }
 
     @PostMapping("/{koffaId}/add-products")
-    public ResponseEntity<Koffa> addProductsToKoffa(@PathVariable("koffaId") Integer koffaId, @RequestBody List<Integer> productIds) {
+    public ResponseEntity<Koffa> addProductsToKoffa(@PathVariable("koffaId") Integer koffaId, @RequestBody Integer productIds) {
         Koffa koffa = koffaService.getKoffaById(koffaId);
         if (koffa == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        //List<Produit> produits = produit__service.getProduitsByIds(productIds);
-        //koffa.getProduits_Koffa().addAll(produits);
+        List<Produit> produits = produit__service.getProduitByIds(productIds);
+        koffa.getProduits_Koffa().addAll(produits);
 
         // Save the updated Koffa to the database
         Koffa updatedKoffa = koffaService.saveKoffa(koffa);
