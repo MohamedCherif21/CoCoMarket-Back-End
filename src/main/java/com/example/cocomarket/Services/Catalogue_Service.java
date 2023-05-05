@@ -135,7 +135,7 @@ public class Catalogue_Service implements ICatalogue {
         // Récupérer les 5 produits les mieux notés
         List<Produit> topRatedProducts = produitRepository.findAll()
                 .stream()
-                .filter(p -> p.getRaiting_prod() != null && !p.getRaiting_prod().isEmpty())
+                .filter(p -> p.getRaiting_products() != null && !p.getRaiting_products().isEmpty())
                 .sorted(Comparator.comparing(p -> -getAverageScore(p)))
                 .limit(2)
                 .collect(Collectors.toList());
@@ -154,7 +154,7 @@ public class Catalogue_Service implements ICatalogue {
     }
 
     private Double getAverageScore(Produit produit) {
-        return produit.getRaiting_prod().stream()
+        return produit.getRaiting_products().stream()
                 .mapToInt(r -> r.getScore())
                 .average()
                 .orElse(0.0);

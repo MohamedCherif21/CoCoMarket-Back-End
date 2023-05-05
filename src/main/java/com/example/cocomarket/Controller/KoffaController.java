@@ -74,8 +74,8 @@ public class KoffaController {
         if (koffa == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        List<Produit> produits = produit__service.getProduitsByIds(productIds);
-        koffa.getProduits_Koffa().addAll(produits);
+        //List<Produit> produits = produit__service.getProduitsByIds(productIds);
+        //koffa.getProduits_Koffa().addAll(produits);
 
         // Save the updated Koffa to the database
         Koffa updatedKoffa = koffaService.saveKoffa(koffa);

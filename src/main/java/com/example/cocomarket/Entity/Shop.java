@@ -27,8 +27,6 @@ public class Shop {
     private Integer BIC;
     @Enumerated(EnumType.STRING)
     private Status traitement;
-    private String qrCodeShop ;
-    private String url;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
@@ -38,6 +36,11 @@ public class Shop {
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     private Contrat Contrat_shop;
+
+    @Lob
+    @Column(name = "qr_code_shop", columnDefinition="VARBINARY(5000)")
+    private byte[] qrCodeShop;
+    private String url;
 
 
 

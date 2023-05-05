@@ -17,7 +17,6 @@ public interface IProduit {
     String  SumRatting(Integer id , Integer id2);
     List<Produit> getAllProduits();
 
-
     public List<Produit> Recomendation(Integer idproduit , Integer idCateg ) ;
 
 

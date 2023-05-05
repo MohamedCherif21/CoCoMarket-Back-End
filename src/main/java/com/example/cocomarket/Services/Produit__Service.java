@@ -22,10 +22,10 @@ public class Produit__Service implements IProduit {
         return produitRepository.save(produit);
     }
 
-       public Optional<Produit> getProduitById(Integer id) {
+
+       public Optional<Produit> getProduitByIds(Integer id) {
             return Optional.ofNullable(produitRepository.findById(id).orElse(null));
     }
-
     public List<Produit> getAllProduits() {
         return produitRepository.findAll();
     }
@@ -58,10 +58,10 @@ public class Produit__Service implements IProduit {
     @Override
     public void AddProduitAffeASHopAndAffeAcategorie(Integer idProduit, Integer idShop, Integer idCateg) {
         Produit produit = prorepo.findById(idProduit).orElse(null) ;
-        Shop shop = Shoprepo.findById(idShop).orElse(null);
+        Shop shopes = Shoprepo.findById(idShop).orElse(null);
         Categorie categorie = cr.findById(idCateg).orElse(null);
         produit.setCategories(categorie);
-        produit.setShopes(shop);
+        produit.setShopes(shopes);
         prorepo.save(produit);
 
     }
@@ -75,10 +75,12 @@ public class Produit__Service implements IProduit {
         //produit.getRaiting_products().add(R) ;
         System.out.println("♦♦♦♦♦♦♦♦♦♦"+R);
         System.out.println("♦♦♦♦♦♦♦♦♦♦"+produit);
-        produit.getRaiting_prod().add(R) ;
+        produit.getRaiting_products().add(R) ;
         prorepo.save(produit) ;
 
     }
+
+
 
     @Override
     public String SumRatting(Integer id , Integer id2 ) {
@@ -88,11 +90,11 @@ public class Produit__Service implements IProduit {
         Produit p=  prorepo.findById(id).orElse(null);
         Produit p2= prorepo.findById(id2).orElse(null) ;
 
-        for (Raiting_Product j: p2.getRaiting_prod()) {
+        for (Raiting_Product j: p2.getRaiting_products()) {
             b += j.getScore();
         }
 
-        for(Raiting_Product i:p.getRaiting_prod()){
+        for(Raiting_Product i:p.getRaiting_products()){
             a+=i.getScore();
         }
         System.out.println("♦♦♦♦♦♦♦♦♦♦"+b);
@@ -121,18 +123,6 @@ public class Produit__Service implements IProduit {
         }
         return p2;
 
-    }
-
-
-    public List<Produit> getProduitsByIds(List<Integer> productIds) {
-        List<Produit> produits = new ArrayList<>();
-        for (Integer id : productIds) {
-            Optional<Produit> produit = produitRepository.findById(id);
-            if (produit.isPresent()) {
-                produits.add(produit.get());
-            }
-        }
-        return produits;
     }
 
 
@@ -172,12 +162,6 @@ public class Produit__Service implements IProduit {
 
         return
         Shoprepo.findAll();*/
-
-
-
-
-
-
 
 
 }

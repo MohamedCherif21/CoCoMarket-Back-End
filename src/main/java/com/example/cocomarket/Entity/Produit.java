@@ -33,10 +33,13 @@ public class Produit {
     @Enumerated(EnumType.STRING)
     private Status status;//ywefe9 3lih lbaye3 bch ybi3ou ou non//par default Null
     private LocalDate datePublication;
-    @OneToMany(cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<Raiting_Product> raiting_prod;
-
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<Raiting_Product> raiting_products ;
+    //@OneToMany(cascade = CascadeType.ALL)
+    // private Set<ImageData> image ;
+    @OneToMany(mappedBy = "produit",cascade = CascadeType.ALL)
+    private Set<ImageData> image ;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnore
@@ -73,7 +76,7 @@ public class Produit {
         this.EtatsProduit = EtatsProduit;
         this.status = status;
         this.datePublication = datePublication;
-        this.raiting_prod = raiting_prod;
+        this.raiting_products = raiting_prod;
         this.Categories = Categories;
         this.Shopes = Shopes;
         this.catalogues = catalogues;
